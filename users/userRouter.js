@@ -21,6 +21,10 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
   // do your magic!
+  userDb.getById(req.params.id)
+    .then(user => {
+      res.status(200).json(user);
+  })
 });
 
 router.get('/:id/posts', (req, res) => {

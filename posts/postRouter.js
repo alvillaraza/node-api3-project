@@ -13,6 +13,11 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
   // do your magic!
+  postDb.getById(req.params.id)
+    .then(post => {
+      res.status(200).json(post);
+  })
+
 });
 
 router.delete('/:id', (req, res) => {
