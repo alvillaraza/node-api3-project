@@ -33,6 +33,8 @@ router.get('/:id/posts', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   // do your magic!
+  userDb.remove(req.params.id)
+    .then(count => { res.status(200).json(count) });
 });
 
 router.put('/:id', (req, res) => {

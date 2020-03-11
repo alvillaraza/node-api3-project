@@ -22,6 +22,8 @@ router.get('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   // do your magic!
+  postDb.remove(req.params.id)
+    .then(count => { res.status(200).json(count) });
 });
 
 router.put('/:id', (req, res) => {
