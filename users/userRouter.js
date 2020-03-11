@@ -4,7 +4,16 @@ const userDb = require('./userDb.js');
 const router = express.Router();
 
 router.post('/', (req, res) => {
-  // do your magic!
+  const name = req.body;
+  const newUser = req.body;
+
+  userDb.insert(newUser)
+    .then(user => {
+    if (!name) {
+      res.status(400).json({ message: "Please provide name for user" });
+      }
+      res.status(201).json(user);
+  })
 });
 
 router.post('/:id/posts', (req, res) => {
@@ -12,7 +21,6 @@ router.post('/:id/posts', (req, res) => {
 });
 
 router.get('/', (req, res) => {
-  // do your magic!
   userDb.get()
     .then(users => {
       res.status(200).json(users);
@@ -20,7 +28,6 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-  // do your magic!
   userDb.getById(req.params.id)
     .then(user => {
       res.status(200).json(user);
@@ -29,6 +36,12 @@ router.get('/:id', (req, res) => {
 
 router.get('/:id/posts', (req, res) => {
   // do your magic!
+  userDb.getUserPosts(req.params.id)
+    .then(user => {
+      if (user) {
+        res.status(200).json(user);
+    }
+  })
 });
 
 router.delete('/:id', (req, res) => {
