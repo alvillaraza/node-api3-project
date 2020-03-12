@@ -33,7 +33,7 @@ router.post("/:id/posts", (req, res) => {
   userDb
     .insert(text)
     .then(something => {
-      res.status(201).json({message: "success"});
+      res.status(201).json({ message: "success" });
     })
     .catch(error => {
       // log error to database
@@ -68,8 +68,7 @@ router.delete("/:id", (req, res) => {
   });
 });
 
-router.put("/:id", (req, res) => {
-  // do your magic! check this
+router.put("/:id", validateUserId, (req, res) => {
   userDb
     .update(req.params.id, req.body)
     .then(updateUser => {
@@ -87,26 +86,27 @@ router.put("/:id", (req, res) => {
 //custom middleware
 
 function validateUserId(req, res, next) {
-  // const id = req.param.id;
+  const id = req.param.id;
   // do your magic!
-  // if (!id) {
-  //   res.status(400).json({message: "invalid user id"});
-  // } else {
-  //   req.user = id;
-  // }
-  // next();
+  if (!id) {
+    res.status(400).json({ message: "invalid user id" });
+  } else {
+    req.user = id;
+  }
+  next();
 }
 
 function validateUser(req, res, next) {
   // console.log(req.name);
   // // do your magic!
-  const {name} = req.body;
+  const { name } = req.body;
   // console.log(req.body);
-    if (!req.body) {
-      res.status(400).json({ message: "missing user data" });
-    } if (!name) {
-      res.status(400).json({ message: "missing required name field" });
-    }
+  if (!req.body) {
+    res.status(400).json({ message: "missing user data" });
+  }
+  if (!name) {
+    res.status(400).json({ message: "missing required name field" });
+  }
   next();
 }
 
