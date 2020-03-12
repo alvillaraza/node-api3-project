@@ -11,7 +11,9 @@ server.use("/api/users", userRouter);
 server.get("/", (req, res) => {
   const environment = process.env;
   const port = process.env.PORT || 4220;
-  res.send(`<h2>Let's write some middleware!</h2>`);
+  res
+    .status(200)
+    .json({ api: `<h2>Let's write some middleware!</h2>`, port, environment });
 });
 
 //custom middleware

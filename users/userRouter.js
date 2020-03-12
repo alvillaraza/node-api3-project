@@ -31,7 +31,7 @@ router.post("/:id/posts", validatePost, (req, res) => {
     user_id: id
   };
 
-  postDb
+  postDb //this needed to be accessing portDb, not userDb
     .insert(post)
     .then(updateText => {
       res.status(201).json( updateText);
