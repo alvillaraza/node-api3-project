@@ -1,12 +1,9 @@
 const express = require("express");
 const server = express();
 const userDb = require("./userDb.js");
+const postDb = require('../posts/postDb.js');
 
 const router = express.Router();
-
-// server.use(validateUserId());
-// server.use(validateUser());
-// server.use(validatePost());
 
 server.use(express.json());
 
@@ -26,14 +23,18 @@ router.post("/", validateUser, (req, res) => {
 });
 
 router.post("/:id/posts", (req, res) => {
-  const text = req.body;
-  // const post = req.body;
+  const { text } = req.body;
   const id = req.params.id;
 
-  userDb
-    .insert(text)
-    .then(something => {
-      res.status(201).json({ message: "success" });
+  const post = {
+    text: text,
+    user_id: id
+  };
+
+  postDb
+    .insert(post)
+    .then(updateText => {
+      res.status(201).json( updateText);
     })
     .catch(error => {
       // log error to database
@@ -41,6 +42,26 @@ router.post("/:id/posts", (req, res) => {
       res.status(500).json({ message: "Error" });
     });
 });
+
+// router.post("/:id/posts", (req, res) => {
+//   const { text } = req.body;
+//   const post = req.body;
+//   const id = req.params.id;
+//   // userDb.insert({ text }).then(({ id }) => {
+//     userDb
+//       .getUserPosts(id)
+//       .then(posts => {
+//         // const post = posts[0];
+//         res.status(201).json({ message: "success" });
+//       })
+
+//       .catch(error => {
+//         // log error to database
+//         console.log(error);
+//         res.status(500).json({ message: "Error" });
+//       });
+//   });
+// });
 
 router.get("/", (req, res) => {
   userDb.get().then(users => {
@@ -87,7 +108,6 @@ router.put("/:id", validateUserId, (req, res) => {
 
 function validateUserId(req, res, next) {
   const id = req.param.id;
-  // do your magic!
   if (!id) {
     res.status(400).json({ message: "invalid user id" });
   } else {
@@ -97,8 +117,7 @@ function validateUserId(req, res, next) {
 }
 
 function validateUser(req, res, next) {
-  // console.log(req.name);
-  // // do your magic!
+
   const { name } = req.body;
   // console.log(req.body);
   if (!req.body) {
